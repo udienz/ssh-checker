@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 # Mahyuddin Suasnto <udienz@rad.net.id>
 
-BASE=$HOME/ssh-checker
-LOG=$BASE/log/
+BASE=$HOME/project/ssh-checker
+LOG=$BASE/log
 
 if [ -f /etc/debian_version ]; then
         AUTHLOG=/var/log/auth.log
@@ -15,7 +15,8 @@ echo "LOG at $AUTHLOG"
 send_mail () {
 	ipaddr=$1
         echo "Getting email addresses"
-        email=$(echo $ipaddr | sed -ne "s~^\([0-9]\{1,3\}\)\.\([0-9]\{1,3\}\)\.\([0-9]\{1,3\}\)\.\([0-9]\{1,3\}\)$~\4.\3.\2.\1~p"| awk {'print$4'} | sed -e 's/"//g' | head -n1 )
+        ipreverse=$(echo $ipaddr | sed -ne "s~^\([0-9]\{1,3\}\)\.\([0-9]\{1,3\}\)\.\([0-9]\{1,3\}\)\.\([0-9]\{1,3\}\)$~\4.\3.\2.\1~p")
+        email=$(host -t any $ipreverse.abuse-contacts.abusix.org | awk {'print$4'} | sed -e 's/"//g' | head -n1 )
 
         echo "Getting logs"
         sudo fgrep "$ipaddr" $AUTHLOG* | sudo grep sshd > $LOG/$ipaddr.log
@@ -82,6 +83,7 @@ do
         	#echo "$count attempts from $host"
        		#host $host
         if [ "$count" -gt "10" -o "$number_of_usernames" -gt "4" ] ; then
+                touch $LOG/$host.mail $LOG/$host.log
                 send_mail $host
                 echo "$host broute force $count. need to block"
                 #sudo /usr/local/sbin/apf --deny $host \"brute force sebanyak $count \"
