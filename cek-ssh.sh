@@ -63,10 +63,10 @@ do
 	host=$2
 	whitelisted=0
 
-	host=`echo $host | sed -e 's/::ffff://'`
-	number_of_usernames=`sudo sed -e '/sshd\[[0-9]*\]: Failed password.*from '$host'/!d' \
+	host=$(echo $host | sed -e 's/::ffff://')
+	number_of_usernames=$(sudo sed -e '/sshd\[[0-9]*\]: Failed password.*from '$host'/!d' \
 		-e 's/.*Failed password for //' -e 's/ from .*//' \
-		$AUTHLOG  | sort -u | wc -l`
+		$AUTHLOG  | sort -u | wc -l)
 
 	for white in $whitelist ; do
         	if [ "$white" = "$host" ] ; then
@@ -76,7 +76,7 @@ do
 
 	if [ "$whitelisted" = "1" ] ; then
         	echo "$count attempts from WHITELISTED $host"
-		elif grep -q "$host" /etc/apf/deny_hosts.rules ; then
+		elif sudo grep -q "$host" /etc/apf/deny_hosts.rules ; then
         	: #echo "$host is blacklisted"
 		else
         	#echo "$count attempts from $host"
