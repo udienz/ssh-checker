@@ -19,7 +19,7 @@ send_mail () {
         email=$(host -t any $ipreverse.abuse-contacts.abusix.org | awk {'print$4'} | sed -e 's/"//g' | head -n1 )
 
         echo "Getting logs"
-        sudo fgrep "$ipaddr" $AUTHLOG* | sudo grep sshd > $LOG/$ipaddr.log
+        sudo fgrep "$ipaddr" $AUTHLOG* | sudo grep "localhost sshd" > $LOG/$ipaddr.log
                 echo "Sending email"
                 cat > $LOG/$ipaddr.mail << EOF
 Dear Abuse Team ($email),
@@ -48,7 +48,7 @@ EOF
                 sudo /usr/local/sbin/apf --deny $host \"brute force sebanyak $count \"
         fi
 	    
-        mutt -a $LOG/$ipaddr.log -s "[Fail2Ban] ssh: banned $ipaddr" -- udienz@ubuntu.com < $LOG/$ipaddr.mail
+        mutt -a $LOG/$ipaddr.log -c hostmaster@sby.rad.net.id,fail2ban@blocklist.de -s "[Fail2Ban] ssh: banned $ipaddr" -- $email < $LOG/$ipaddr.mail
 }
 
 # Fill in your own whitelisted hosts here
