@@ -3,6 +3,7 @@
 
 BASE=$HOME/project/ssh-checker
 LOG=$BASE/log
+SENDEMAIL=0
 
 if [ -f /etc/debian_version ]; then
         AUTHLOG=/var/log/auth.log
@@ -47,8 +48,10 @@ EOF
                 echo "Adding $ipaddr to blocked list"
                 sudo /usr/local/sbin/apf --deny $host \"brute force sebanyak $count \"
         fi
-	    
-        mutt -a $LOG/$ipaddr.log -c hostmaster@sby.rad.net.id,fail2ban@blocklist.de -s "[Fail2Ban] ssh: banned $ipaddr" -- $email < $LOG/$ipaddr.mail
+	
+#	if [ SENDEMAIL == 1    
+#        mutt -a $LOG/$ipaddr.log -c hostmaster@sby.rad.net.id,fail2ban@blocklist.de -s "[Fail2Ban] ssh: banned $ipaddr" -- $email < $LOG/$ipaddr.mail
+        mutt -a $LOG/$ipaddr.log -s "[Fail2Ban] ssh: banned $ipaddr" -- $email < $LOG/saya@udienz.web.id.mail
 }
 
 # Fill in your own whitelisted hosts here
