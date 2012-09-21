@@ -51,7 +51,7 @@ EOF
 	
 #	if [ SENDEMAIL == 1    
 #        mutt -a $LOG/$ipaddr.log -c hostmaster@sby.rad.net.id,fail2ban@blocklist.de -s "[Fail2Ban] ssh: banned $ipaddr" -- $email < $LOG/$ipaddr.mail
-        mutt -a $LOG/$ipaddr.log -s "[Fail2Ban] ssh: banned $ipaddr" -- $email < $LOG/saya@udienz.web.id.mail
+        mutt -a $LOG/$ipaddr.log -s "[Fail2Ban] ssh: banned $ipaddr" -- $email < $LOG/$ipaddr.mail
 }
 
 # Fill in your own whitelisted hosts here
